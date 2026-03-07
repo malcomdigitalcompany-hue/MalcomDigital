@@ -1,16 +1,58 @@
-# React + Vite
+# Malcom Digital
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Building modern websites for small businesses.**
 
-Currently, two official plugins are available:
+Welcome to the official GitHub repository for **Malcom Digital** — a web design and development brand dedicated to helping small businesses establish a stronger digital presence.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Who We Are
 
-## React Compiler
+Malcom Digital creates clean, modern, and responsive websites tailored for small businesses.  
+Our work is centered around professional design, clear user experience, and practical solutions that help businesses stand out online.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## What We Build
 
-## Expanding the ESLint configuration
+- Modern business websites
+- Landing pages
+- Responsive web designs
+- Website redesigns
+- Branded digital experiences
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Our Approach
+
+We believe a website should do more than just exist — it should represent a brand well, build trust, and support business growth.  
+Every project is approached with a focus on:
+
+- Simplicity
+- Professional design
+- Accessibility
+- Responsiveness
+- Strong visual presentation
+
+## Technologies
+
+Projects may be built using:
+
+- HTML5
+- CSS3
+- JavaScript
+- Bootstrap
+- React
+- GitHub Pages
+
+## Vision
+
+Malcom Digital exists to make modern web design more accessible for small businesses.  
+We aim to deliver websites that are visually strong, easy to use, and built with purpose.
+
+## Repository Purpose
+
+This repository serves as the main hub for Malcom Digital, including:
+
+- Brand information
+- Featured projects
+- Website concepts
+- Portfolio work
+- Future updates and development
+
+### Malcom Digital
+*Helping small businesses grow with modern websites.*
