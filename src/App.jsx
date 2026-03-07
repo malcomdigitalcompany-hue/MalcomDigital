@@ -1,5 +1,12 @@
+import { useState } from "react";
+import "./App.css";
+import { Navbar } from "./components/Navbar";
+
 function App() {
-  return <h1>Hello world</h1>
+  const [menuOpen, setMenuOpen] = useState(false);
+  return (
+  <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+  )
 }
 
 export default App
