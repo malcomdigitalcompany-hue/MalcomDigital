@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 
+import banner from "../assets/logo.png"
+
+
 export const Navbar = ({ menuOpen, setMenuOpen }) => {
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -9,10 +12,9 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
     <nav className="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-lg border-b border-blue-500/20 shadow-lg">
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <a href="#home" className="font-mono text-xl font-bold text-black">
-            Malcom<span className="text-blue-500"> Digital</span>
+          <a href={`/`}>
+          <img src={banner} alt="Logo" class="h-10 w-auto object-contain md:h-12 cursor-pointer" ></img>
           </a>
-
           <div
             className="w-7 h-5 relative cursor-pointer z-50 md:hidden text-black"
             onClick={() => setMenuOpen((prev) => !prev)}
@@ -20,10 +22,10 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
             {menuOpen ? "✕" : "☰"}
           </div>
           <div className="hidden md:flex items-center space-x-8">
-            {["home", "about", "projects", "contact"].map((section) => (
+            {["home", "services", "projects", "about", "contact"].map((section) => (
               <a
                 key={section}
-                href={`#${section}`}
+                href={`${section}`}
                 className="text-black-300 relative group"
               >
                 <span className="group-hover:text-black transition-colors">
