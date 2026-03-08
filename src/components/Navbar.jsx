@@ -38,7 +38,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
                 href={section === "home" ? "/" : `#${section}`}
                 className="group relative text-black"
               >
-                <span className="transition-colors group-hover:text-blue-600">
+                <span className="transition-colors text-base group-hover:text-blue-600">
                   {section.charAt(0).toUpperCase() + section.slice(1)}
                 </span>
                 <span className="block h-0.5 origin-center scale-x-0 bg-blue-500 transition-transform duration-300 group-hover:scale-x-100" />
