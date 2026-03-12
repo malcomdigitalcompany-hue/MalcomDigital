@@ -34,8 +34,8 @@ export const Home = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a
-              href="#pricing"
-              className="bg-blue-600 text-white py-3 px-6 rounded font-medium transition hover:-translate-y-0.5 hover:shadow-[0_0_15px_rgba(220,38,38,0.4)]"
+              href="#services"
+              className="bg-blue-600 text-white py-3 px-6 rounded font-medium transition hover:-translate-y-0.5 hover:shadow-[0_0_15px_rgba(38,38,220,0.4)]"
             >
               More Information
             </a>

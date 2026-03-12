@@ -6,7 +6,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
   }, [menuOpen]);
 
-  const navItems = ["home", "services", "projects", "about", "contact"];
+  const navItems = ["home", "services", "about", "contact"];
 
   return (
     <nav className="fixed top-0 z-40 w-full border-b border-blue-500/20 bg-white/80 shadow-lg backdrop-blur-lg">
@@ -35,7 +35,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
             {navItems.map((section) => (
               <a
                 key={section}
-                href={section === "home" ? "/" : `#${section}`}
+                href={section === "home" ? "#home" : `#${section}`}
                 className="group relative text-black"
               >
                 <span className="transition-colors text-base group-hover:text-blue-600">
@@ -60,7 +60,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
           {["home", "services", "projects", "about", "contact"].map((section) => (
             <a
               key={section}
-              href={section === "home" ? "/" : `#${section}`}
+              href={section === "home" ? "#home" : `#${section}`}
               className="group relative"
               onClick={() => setMenuOpen(false)}
             >
