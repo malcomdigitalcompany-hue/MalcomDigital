@@ -4,6 +4,7 @@ import { Navbar } from "./components/Navbar";
 import { Home } from "./components/sections/home";
 import { Services } from "./components/sections/services";
 import { About } from "./components/sections/about";
+import { Contact } from "./components/sections/contact";
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,6 +14,7 @@ function App() {
   <Home />;
   <Services />;
   <About />;
+  <Contact />;
   </>
   )
 }

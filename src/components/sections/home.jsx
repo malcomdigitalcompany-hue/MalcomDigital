@@ -13,7 +13,7 @@ export const Home = () => {
 
           {/* Subheadline */}
           <p className="text-black-300 text-lg mb-8 max-w-2xl mx-auto">
-            We build modern, mobile-friendly websites for local businesses fast.
+            Building modern, mobile-friendly websites for local businesses fast.
             Perfect for restaurants, barbers, gyms, and small businesses that want
             to look professional and get more calls, customers, and bookings.
           </p>
