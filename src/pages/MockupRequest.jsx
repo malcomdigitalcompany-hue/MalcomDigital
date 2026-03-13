@@ -1,9 +1,11 @@
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
 
 export const MockupRequest = () => {
   const [formData, setFormData] = useState({
     businessName: "",
     businessType: "",
+    customBusinessType: "",
     style: "",
     colors: "",
     pages: [],
@@ -12,6 +14,14 @@ export const MockupRequest = () => {
     name: "",
     email: "",
   });
+
+  const [customPage, setCustomPage] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [status, setStatus] = useState("");
+
+  const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_MOCKUP_TEMPLATE_ID;
+  const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
   const pageOptions = ["Home", "About", "Services", "Gallery", "Contact"];
 
@@ -32,15 +42,91 @@ export const MockupRequest = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleAddCustomPage = () => {
+    const trimmedPage = customPage.trim();
+    if (!trimmedPage) return;
+
+    const normalizedPage =
+      trimmedPage.charAt(0).toUpperCase() + trimmedPage.slice(1);
+
+    if (formData.pages.includes(normalizedPage)) {
+      setCustomPage("");
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      pages: [...prev.pages, normalizedPage],
+    }));
+
+    setCustomPage("");
+  };
+
+  const handleRemovePage = (pageToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      pages: prev.pages.filter((page) => page !== pageToRemove),
+    }));
+  };
+
+  const resetForm = () => {
+    setFormData({
+      businessName: "",
+      businessType: "",
+      customBusinessType: "",
+      style: "",
+      colors: "",
+      pages: [],
+      examples: "",
+      notes: "",
+      name: "",
+      email: "",
+    });
+    setCustomPage("");
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    setIsSending(true);
+    setStatus("");
+
+    const resolvedBusinessType =
+      formData.businessType === "other"
+        ? formData.customBusinessType
+        : formData.businessType;
+
+    const templateParams = {
+      user_name: formData.name,
+      user_email: formData.email,
+      reply_to: formData.email,
+      business_name: formData.businessName,
+      business_type: resolvedBusinessType,
+      style: formData.style,
+      colors: formData.colors,
+      pages: formData.pages.join(", "),
+      examples: formData.examples,
+      notes: formData.notes,
+    };
+
+    try {
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, {
+        publicKey: PUBLIC_KEY,
+      });
+
+      setStatus("Mockup request sent successfully.");
+      resetForm();
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      setStatus("Something went wrong. Please try again.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
     <section className="min-h-screen bg-white py-24 text-slate-900">
       <div className="mx-auto max-w-3xl px-4">
-        <h1 className="mb-4 text-center text-4xl font-bold bg-gradient-to-r from-blue-700 to-blue-400 bg-clip-text text-transparent">
+        <h1 className="mb-4 bg-gradient-to-r from-blue-700 to-blue-400 bg-clip-text text-center text-4xl font-bold text-transparent">
           Request a Free Mockup
         </h1>
 
@@ -63,6 +149,7 @@ export const MockupRequest = () => {
               value={formData.businessName}
               onChange={handleChange}
               placeholder="Your business name"
+              required
               className="w-full rounded-lg border border-blue-100 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
           </div>
@@ -75,6 +162,7 @@ export const MockupRequest = () => {
               name="businessType"
               value={formData.businessType}
               onChange={handleChange}
+              required
               className="w-full rounded-lg border border-blue-100 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             >
               <option value="">Select one</option>
@@ -87,6 +175,23 @@ export const MockupRequest = () => {
             </select>
           </div>
 
+          {formData.businessType === "other" && (
+            <div>
+              <label className="mb-2 block text-sm font-medium text-blue-700">
+                Enter Business Type
+              </label>
+              <input
+                type="text"
+                name="customBusinessType"
+                value={formData.customBusinessType}
+                onChange={handleChange}
+                placeholder="Ex: Dentist, Photographer, Roofing Company"
+                required
+                className="w-full rounded-lg border border-blue-100 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              />
+            </div>
+          )}
+
           <div>
             <label className="mb-2 block text-sm font-medium text-blue-700">
               Preferred Style
@@ -95,6 +200,7 @@ export const MockupRequest = () => {
               name="style"
               value={formData.style}
               onChange={handleChange}
+              required
               className="w-full rounded-lg border border-blue-100 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             >
               <option value="">Select a style</option>
@@ -123,7 +229,8 @@ export const MockupRequest = () => {
             <label className="mb-3 block text-sm font-medium text-blue-700">
               Pages Needed
             </label>
-            <div className="flex flex-wrap gap-3">
+
+            <div className="mb-4 flex flex-wrap gap-3">
               {pageOptions.map((page) => (
                 <label
                   key={page}
@@ -138,6 +245,43 @@ export const MockupRequest = () => {
                 </label>
               ))}
             </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <input
+                type="text"
+                value={customPage}
+                onChange={(e) => setCustomPage(e.target.value)}
+                placeholder="Add a custom page (ex: Pricing, FAQ, Testimonials)"
+                className="w-full rounded-lg border border-blue-100 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              />
+              <button
+                type="button"
+                onClick={handleAddCustomPage}
+                className="rounded-lg bg-blue-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
+              >
+                Add Page
+              </button>
+            </div>
+
+            {formData.pages.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {formData.pages.map((page) => (
+                  <div
+                    key={page}
+                    className="flex items-center gap-2 rounded-full bg-blue-100 px-3 py-2 text-sm text-blue-800"
+                  >
+                    <span>{page}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemovePage(page)}
+                      className="font-bold text-blue-700 hover:text-blue-900"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>
@@ -179,6 +323,7 @@ export const MockupRequest = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Your name"
+                required
                 className="w-full rounded-lg border border-blue-100 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
               />
             </div>
@@ -193,6 +338,7 @@ export const MockupRequest = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Your email"
+                required
                 className="w-full rounded-lg border border-blue-100 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
               />
             </div>
@@ -201,11 +347,16 @@ export const MockupRequest = () => {
           <div className="flex justify-center pt-2">
             <button
               type="submit"
-              className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-[0_0_15px_rgba(37,99,235,0.25)]"
+              disabled={isSending}
+              className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-[0_0_15px_rgba(37,99,235,0.25)] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Submit Request
+              {isSending ? "Sending..." : "Submit Request"}
             </button>
           </div>
+
+          {status && (
+            <p className="text-center text-sm text-slate-600">{status}</p>
+          )}
         </form>
       </div>
     </section>
