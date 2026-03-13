@@ -6,6 +6,7 @@ export const MockupRequest = () => {
     businessName: "",
     businessType: "",
     customBusinessType: "",
+    sitePlan: "",
     style: "",
     colors: "",
     pages: [],
@@ -69,11 +70,19 @@ export const MockupRequest = () => {
     }));
   };
 
+  const handlePlanSelect = (plan) => {
+    setFormData((prev) => ({
+      ...prev,
+      sitePlan: plan,
+    }));
+  };
+
   const resetForm = () => {
     setFormData({
       businessName: "",
       businessType: "",
       customBusinessType: "",
+      sitePlan: "",
       style: "",
       colors: "",
       pages: [],
@@ -86,62 +95,63 @@ export const MockupRequest = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSending(true);
-  setStatus("");
+    e.preventDefault();
+    setIsSending(true);
+    setStatus("");
 
-  const missing = [
-    !SERVICE_ID && "VITE_EMAILJS_SERVICE_ID",
-    !TEMPLATE_ID && "VITE_EMAILJS_MOCKUP_TEMPLATE_ID",
-    !PUBLIC_KEY && "VITE_EMAILJS_PUBLIC_KEY",
-  ].filter(Boolean);
+    const missing = [
+      !SERVICE_ID && "VITE_EMAILJS_SERVICE_ID",
+      !TEMPLATE_ID && "VITE_EMAILJS_MOCKUP_TEMPLATE_ID",
+      !PUBLIC_KEY && "VITE_EMAILJS_PUBLIC_KEY",
+    ].filter(Boolean);
 
-  if (missing.length > 0) {
-    console.log("Missing EmailJS config:", {
-      SERVICE_ID,
-      TEMPLATE_ID,
-      PUBLIC_KEY,
-      missing,
-    });
-    setStatus(`Missing config: ${missing.join(", ")}`);
-    setIsSending(false);
-    return;
-  }
+    if (missing.length > 0) {
+      console.log("Missing EmailJS config:", {
+        SERVICE_ID,
+        TEMPLATE_ID,
+        PUBLIC_KEY,
+        missing,
+      });
+      setStatus(`Missing config: ${missing.join(", ")}`);
+      setIsSending(false);
+      return;
+    }
 
-  const resolvedBusinessType =
-    formData.businessType === "other"
-      ? formData.customBusinessType.trim()
-      : formData.businessType;
+    const resolvedBusinessType =
+      formData.businessType === "other"
+        ? formData.customBusinessType.trim()
+        : formData.businessType;
 
-  const templateParams = {
-    user_name: formData.name.trim(),
-    user_email: formData.email.trim(),
-    reply_to: formData.email.trim(),
-    business_name: formData.businessName.trim(),
-    business_type: resolvedBusinessType,
-    style: formData.style,
-    colors: formData.colors.trim(),
-    pages: formData.pages.join(", "),
-    examples: formData.examples.trim(),
-    notes: formData.notes.trim(),
+    const templateParams = {
+      user_name: formData.name.trim(),
+      user_email: formData.email.trim(),
+      reply_to: formData.email.trim(),
+      business_name: formData.businessName.trim(),
+      business_type: resolvedBusinessType,
+      site_plan: formData.sitePlan,
+      style: formData.style,
+      colors: formData.colors.trim(),
+      pages: formData.pages.join(", "),
+      examples: formData.examples.trim(),
+      notes: formData.notes.trim(),
+    };
+
+    try {
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, {
+        publicKey: PUBLIC_KEY,
+      });
+
+      setStatus("Mockup request sent successfully.");
+      resetForm();
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      setStatus(
+        error?.text || error?.message || "Something went wrong. Please try again."
+      );
+    } finally {
+      setIsSending(false);
+    }
   };
-
-  try {
-    await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, {
-      publicKey: PUBLIC_KEY,
-    });
-
-    setStatus("Mockup request sent successfully.");
-    resetForm();
-  } catch (error) {
-    console.error("EmailJS Error:", error);
-    setStatus(
-      error?.text || error?.message || "Something went wrong. Please try again."
-    );
-  } finally {
-    setIsSending(false);
-  }
-};
 
   return (
     <section className="min-h-screen bg-white py-24 text-slate-900">
@@ -211,6 +221,66 @@ export const MockupRequest = () => {
               />
             </div>
           )}
+
+          <div>
+            <label className="mb-3 block text-sm font-medium text-blue-700">
+              Website Plan
+            </label>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => handlePlanSelect("Non-ecommerce - $30/month")}
+                className={`rounded-2xl border p-5 text-left transition ${
+                  formData.sitePlan === "Non-ecommerce - $30/month"
+                    ? "border-blue-600 bg-blue-50 ring-2 ring-blue-200"
+                    : "border-blue-100 bg-white hover:border-blue-300 hover:shadow-sm"
+                }`}
+              >
+                <div className="mb-2 flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    Non-ecommerce
+                  </h3>
+                  <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+                    $30/mo
+                  </span>
+                </div>
+                <p className="text-sm text-slate-600">
+                  Best for service businesses, portfolios, restaurants, and
+                  informational websites.
+                </p>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handlePlanSelect("Ecommerce - $50/month")}
+                className={`rounded-2xl border p-5 text-left transition ${
+                  formData.sitePlan === "Ecommerce - $50/month"
+                    ? "border-blue-600 bg-blue-50 ring-2 ring-blue-200"
+                    : "border-blue-100 bg-white hover:border-blue-300 hover:shadow-sm"
+                }`}
+              >
+                <div className="mb-2 flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    Ecommerce
+                  </h3>
+                  <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+                    $50/mo
+                  </span>
+                </div>
+                <p className="text-sm text-slate-600">
+                  Best for businesses that need online ordering, product
+                  listings, and checkout functionality.
+                </p>
+              </button>
+            </div>
+
+            {!formData.sitePlan && (
+              <p className="mt-2 text-sm text-slate-500">
+                Select the type of website you want.
+              </p>
+            )}
+          </div>
 
           <div>
             <label className="mb-2 block text-sm font-medium text-blue-700">
@@ -367,7 +437,7 @@ export const MockupRequest = () => {
           <div className="flex justify-center pt-2">
             <button
               type="submit"
-              disabled={isSending}
+              disabled={isSending || !formData.sitePlan}
               className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-[0_0_15px_rgba(37,99,235,0.25)] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSending ? "Sending..." : "Submit Request"}
