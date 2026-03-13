@@ -91,11 +91,6 @@ export const MockupRequest = () => {
   setStatus("");
 
   if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-    console.log("EmailJS env check", {
-      SERVICE_ID,
-      TEMPLATE_ID,
-      PUBLIC_KEY,
-    });
     setStatus("Email service is not configured correctly.");
     setIsSending(false);
     return;
@@ -103,46 +98,33 @@ export const MockupRequest = () => {
 
   const resolvedBusinessType =
     formData.businessType === "other"
-      ? formData.customBusinessType
+      ? formData.customBusinessType.trim()
       : formData.businessType;
 
   const templateParams = {
-    user_name: formData.name,
-    user_email: formData.email,
-    reply_to: formData.email,
-    business_name: formData.businessName,
+    user_name: formData.name.trim(),
+    user_email: formData.email.trim(),
+    reply_to: formData.email.trim(),
+    business_name: formData.businessName.trim(),
     business_type: resolvedBusinessType,
     style: formData.style,
-    colors: formData.colors,
+    colors: formData.colors.trim(),
     pages: formData.pages.join(", "),
-    examples: formData.examples,
-    notes: formData.notes,
+    examples: formData.examples.trim(),
+    notes: formData.notes.trim(),
   };
 
   try {
-    const response = await emailjs.send(
-      SERVICE_ID,
-      TEMPLATE_ID,
-      templateParams,
-      { publicKey: PUBLIC_KEY }
-    );
+    await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, {
+      publicKey: PUBLIC_KEY,
+    });
 
-    console.log("EmailJS success:", response);
     setStatus("Mockup request sent successfully.");
     resetForm();
   } catch (error) {
-    console.error("EmailJS full error:", error);
-    console.log("EmailJS debug", {
-      SERVICE_ID,
-      TEMPLATE_ID,
-      PUBLIC_KEY,
-      templateParams,
-    });
-
+    console.error("EmailJS Error:", error);
     setStatus(
-      error?.text ||
-        error?.message ||
-        "Something went wrong. Please try again."
+      error?.text || error?.message || "Something went wrong. Please try again."
     );
   } finally {
     setIsSending(false);
