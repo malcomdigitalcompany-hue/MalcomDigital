@@ -7,6 +7,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
   }, [menuOpen]);
 
   const navItems = ["home", "services", "about", "contact"];
+  const homeBase = import.meta.env.BASE_URL;
 
   return (
     <nav className="fixed top-0 z-40 w-full border-b border-blue-500/20 bg-white/80 shadow-lg backdrop-blur-lg">
@@ -14,7 +15,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
         <div className="grid h-16 grid-cols-3 items-center">
           {/* Left */}
           <div className="flex items-center justify-start">
-            <a href="#home" className="hidden md:block">
+            <a href={`${homeBase}#home`} className="hidden md:block">
               <img
                 src={banner}
                 alt="Malcom Digital logo"
@@ -35,7 +36,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
             {navItems.map((section) => (
               <a
                 key={section}
-                href={section === "home" ? "#home" : `#${section}`}
+                href={`${homeBase}#${section}`}
                 className="group relative text-black"
               >
                 <span className="text-base transition-colors group-hover:text-blue-600">
@@ -49,7 +50,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
           {/* Right */}
           <div className="hidden md:flex items-center justify-end">
             <a
-              href="#services"
+              href={`${homeBase}#services`}
               className="rounded-sm bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-[0_0_15px_rgba(38,38,220,0.4)]"
             >
               Get Started
@@ -64,10 +65,10 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
         }`}
       >
         <div className="flex flex-col space-y-6 p-8 pt-20">
-          {["home", "services", "projects", "about", "contact"].map((section) => (
+          {["home", "services", "about", "contact"].map((section) => (
             <a
               key={section}
-              href={section === "home" ? "#home" : `#${section}`}
+              href={`${homeBase}#${section}`}
               className="group relative"
               onClick={() => setMenuOpen(false)}
             >

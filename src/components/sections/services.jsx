@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const Services = () => {
   const steps = [
     {
@@ -57,12 +59,12 @@ export const Services = () => {
         </div>
 
         <div className="mt-10 flex justify-center">
-          <a
-            href="#contact"
+          <Link
+            to="/mockup-request"
             className="rounded-sm bg-blue-600 px-3 py-2 text-md font-medium text-white transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-[0_0_15px_rgba(38,38,220,0.4)]"
           >
             Start With a Free Mockup
-          </a>
+          </Link>
         </div>
       </div>
     </section>

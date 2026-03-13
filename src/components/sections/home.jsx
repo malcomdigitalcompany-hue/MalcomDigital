@@ -13,7 +13,7 @@ export const Home = () => {
 
           {/* Subheadline */}
           <p className="text-black-300 text-lg mb-8 max-w-2xl mx-auto">
-            Building modern, mobile-friendly websites for local businesses fast.
+            Building modern, mobile-friendly websites for small businesses fast.
             Perfect for restaurants, barbers, gyms, and small businesses that want
             to look professional and get more calls, customers, and bookings.
           </p>
@@ -27,7 +27,7 @@ export const Home = () => {
               ✅ $300 flat rate
             </span>
             <span className="text-sm text-black-300 border border-blue-600/40 px-4 py-2 rounded-full">
-              ✅ $50–$100/mo maintenance
+              ✅ $30–$50/mo maintenance
             </span>
           </div>
 
