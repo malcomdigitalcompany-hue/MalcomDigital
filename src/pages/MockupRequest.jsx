@@ -86,42 +86,68 @@ export const MockupRequest = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSending(true);
-    setStatus("");
+  e.preventDefault();
+  setIsSending(true);
+  setStatus("");
 
-    const resolvedBusinessType =
-      formData.businessType === "other"
-        ? formData.customBusinessType
-        : formData.businessType;
+  if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+    console.log("EmailJS env check", {
+      SERVICE_ID,
+      TEMPLATE_ID,
+      PUBLIC_KEY,
+    });
+    setStatus("Email service is not configured correctly.");
+    setIsSending(false);
+    return;
+  }
 
-    const templateParams = {
-      user_name: formData.name,
-      user_email: formData.email,
-      reply_to: formData.email,
-      business_name: formData.businessName,
-      business_type: resolvedBusinessType,
-      style: formData.style,
-      colors: formData.colors,
-      pages: formData.pages.join(", "),
-      examples: formData.examples,
-      notes: formData.notes,
-    };
+  const resolvedBusinessType =
+    formData.businessType === "other"
+      ? formData.customBusinessType
+      : formData.businessType;
 
-    try {
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, {
-        publicKey: PUBLIC_KEY,
-      });
-
-      setStatus("Mockup request sent successfully.");
-      resetForm();
-    } catch (error) {
-      console.error("EmailJS Error:", error);
-      setStatus("Something went wrong. Please try again.");
-    } finally {
-      setIsSending(false);
-    }
+  const templateParams = {
+    user_name: formData.name,
+    user_email: formData.email,
+    reply_to: formData.email,
+    business_name: formData.businessName,
+    business_type: resolvedBusinessType,
+    style: formData.style,
+    colors: formData.colors,
+    pages: formData.pages.join(", "),
+    examples: formData.examples,
+    notes: formData.notes,
   };
+
+  try {
+    const response = await emailjs.send(
+      SERVICE_ID,
+      TEMPLATE_ID,
+      templateParams,
+      { publicKey: PUBLIC_KEY }
+    );
+
+    console.log("EmailJS success:", response);
+    setStatus("Mockup request sent successfully.");
+    resetForm();
+  } catch (error) {
+    console.error("EmailJS full error:", error);
+    console.log("EmailJS debug", {
+      SERVICE_ID,
+      TEMPLATE_ID,
+      PUBLIC_KEY,
+      templateParams,
+    });
+
+    setStatus(
+      error?.text ||
+        error?.message ||
+        "Something went wrong. Please try again."
+    );
+  } finally {
+    setIsSending(false);
+  }
+};
 
   return (
     <section className="min-h-screen bg-white py-24 text-slate-900">
