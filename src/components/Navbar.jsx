@@ -14,7 +14,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
         <div className="grid h-16 grid-cols-3 items-center">
           {/* Left */}
           <div className="flex items-center justify-start">
-            <a href="/" className="hidden md:block">
+            <a href="#home" className="hidden md:block">
               <img
                 src={banner}
                 alt="Malcom Digital logo"
@@ -38,7 +38,7 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
                 href={section === "home" ? "#home" : `#${section}`}
                 className="group relative text-black"
               >
-                <span className="transition-colors text-base group-hover:text-blue-600">
+                <span className="text-base transition-colors group-hover:text-blue-600">
                   {section.charAt(0).toUpperCase() + section.slice(1)}
                 </span>
                 <span className="block h-0.5 origin-center scale-x-0 bg-blue-500 transition-transform duration-300 group-hover:scale-x-100" />
@@ -46,8 +46,15 @@ export const Navbar = ({ menuOpen, setMenuOpen }) => {
             ))}
           </div>
 
-          {/* Right spacer */}
-          <div className="hidden md:block" />
+          {/* Right */}
+          <div className="hidden md:flex items-center justify-end">
+            <a
+              href="#services"
+              className="rounded-sm bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-[0_0_15px_rgba(38,38,220,0.4)]"
+            >
+              Get Started
+            </a>
+          </div>
         </div>
       </div>
 
