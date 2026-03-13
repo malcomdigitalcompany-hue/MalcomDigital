@@ -90,8 +90,20 @@ export const MockupRequest = () => {
   setIsSending(true);
   setStatus("");
 
-  if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-    setStatus("Email service is not configured correctly.");
+  const missing = [
+    !SERVICE_ID && "VITE_EMAILJS_SERVICE_ID",
+    !TEMPLATE_ID && "VITE_EMAILJS_MOCKUP_TEMPLATE_ID",
+    !PUBLIC_KEY && "VITE_EMAILJS_PUBLIC_KEY",
+  ].filter(Boolean);
+
+  if (missing.length > 0) {
+    console.log("Missing EmailJS config:", {
+      SERVICE_ID,
+      TEMPLATE_ID,
+      PUBLIC_KEY,
+      missing,
+    });
+    setStatus(`Missing config: ${missing.join(", ")}`);
     setIsSending(false);
     return;
   }
