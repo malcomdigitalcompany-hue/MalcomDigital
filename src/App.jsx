@@ -32,7 +32,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <BrowserRouter basename="/MalcomDigital">
+    <BrowserRouter basename="/">
       <Routes>
         <Route
           path="/"
